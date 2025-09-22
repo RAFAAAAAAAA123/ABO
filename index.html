@@ -1,109 +1,540 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, World!</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-      <h1 class="title">Hello World! </h1>
-      <p id="currentTime"></p>
-      <script src="script.js"></script>
-  </body>
-</html><!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apakah Riris Lolos PTN?</title>
-  <style>
-    body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background-color: #ffe4ec;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      background-color: white;
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    }
-    h1 {
-      color: #d63384;
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-    }
-    .btn-yes { background-color: #a3e635; }
-    .btn-no { background-color: #f87171; }
-    .btn-yes:hover { background-color: #84cc16; }
-    .btn-no:hover { background-color: #ef4444; }
-    .btn-campus {
-      background-color: #fcd34d;
-    }
-    .btn-campus:hover {
-      background-color: #facc15;
-    }
-    .response {
-      margin-top: 20px;
-      font-size: 1.2em;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Kecocokan ABO Omegaverse</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 700px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #6a11cb;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: #2575fc;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .progress-container {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            display: none;
+        }
+        
+        .question.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .options {
+            display: grid;
+            grid-gap: 12px;
+        }
+        
+        .option {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            background-color: #d6e4ff;
+            border-color: #2575fc;
+            color: #2575fc;
+            font-weight: 600;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        #prev-btn {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        
+        #prev-btn:hover {
+            background-color: #d0d0d0;
+        }
+        
+        #next-btn {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+        }
+        
+        #next-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        #submit-btn {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+            color: white;
+            display: none;
+        }
+        
+        #submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            color: #6a11cb;
+            margin-bottom: 20px;
+        }
+        
+        .dynamic-result {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 20px 0;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .result-description {
+            background-color: #f0f4ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: left;
+            line-height: 1.6;
+        }
+        
+        .result-image {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        
+        .compatibility-score {
+            font-size: 1.5rem;
+            margin: 15px 0;
+            color: #6a11cb;
+            font-weight: 600;
+        }
+        
+        .traits-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .trait {
+            background-color: #e6f0ff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        footer {
+            color: white;
+            text-align: center;
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .dynamic-result {
+                font-size: 2rem;
+            }
+            
+            .result-image {
+                width: 120px;
+                height: 120px;
+                font-size: 3rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Apakah Riris Lolos PTN?</h1>
-    <div>
-      <button class="btn-yes" onclick="jawab('yes')">Lolos</button>
-      <button class="btn-no" onclick="jawab('no')">Tidak</button>
+    <div class="container">
+        <header>
+            <h1>Kalkulator Kecocokan ABO</h1>
+            <p class="subtitle">Temukan dinamika Alpha, Beta, atau Omega Anda dalam Omegaverse</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <!-- Pertanyaan 1 -->
+        <div class="question active" id="question1">
+            <div class="question-text">1. Di situasi sosial, Anda cenderung:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(1, 0)">Memimpin dan mengambil kendali</div>
+                <div class="option" onclick="selectOption(1, 1)">Menyesuaikan diri dengan kelompok</div>
+                <div class="option" onclick="selectOption(1, 2)">Mendukung dan merawat orang lain</div>
+                <div class="option" onclick="selectOption(1, 3)">Mengamati dari pinggir</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 2 -->
+        <div class="question" id="question2">
+            <div class="question-text">2. Ketika menghadapi konflik, Anda biasanya:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(2, 0)">Menghadapi langsung tanpa ragu</div>
+                <div class="option" onclick="selectOption(2, 1)">Mencari solusi yang adil untuk semua</div>
+                <div class="option" onclick="selectOption(2, 2)">Menghindari konfrontasi</div>
+                <div class="option" onclick="selectOption(2, 3)">Mencari bantuan atau mediasi</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 3 -->
+        <div class="question" id="question3">
+            <div class="question-text">3. Kekuatan terbesar Anda adalah:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(3, 0)">Kemampuan memimpin dan mengambil keputusan</div>
+                <div class="option" onclick="selectOption(3, 1)">Kemampuan beradaptasi dan fleksibilitas</div>
+                <div class="option" onclick="selectOption(3, 2)">Empati dan kemampuan memahami orang lain</div>
+                <div class="option" onclick="selectOption(3, 3)">Kemampuan analitis dan observasi</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 4 -->
+        <div class="question" id="question4">
+            <div class="question-text">4. Dalam hubungan, Anda cenderung:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(4, 0)">Protektif dan dominan</div>
+                <div class="option" onclick="selectOption(4, 1)">Seimbang dan praktis</div>
+                <div class="option" onclick="selectOption(4, 2)">Peduli dan penuh perhatian</div>
+                <div class="option" onclick="selectOption(4, 3)">Setia dan intuitif</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 5 -->
+        <div class="question" id="question5">
+            <div class="question-text">5. Orang lain sering menggambarkan Anda sebagai:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(5, 0)">Kuat dan berwibawa</div>
+                <div class="option" onclick="selectOption(5, 1)">Stabil dan dapat diandalkan</div>
+                <div class="option" onclick="selectOption(5, 2)">Perhatian dan penyayang</div>
+                <div class="option" onclick="selectOption(5, 3)">Misterius dan sensitif</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 6 -->
+        <div class="question" id="question6">
+            <div class="question-text">6. Ketika berada di bawah tekanan, Anda:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(6, 0)">Menjadi lebih fokus dan tegas</div>
+                <div class="option" onclick="selectOption(6, 1)">Tetap tenang dan mencari solusi logis</div>
+                <div class="option" onclick="selectOption(6, 2)">Merasa cemas tetapi berusaha membantu orang lain</div>
+                <div class="option" onclick="selectOption(6, 3)">Mencari dukungan dari orang terdekat</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 7 -->
+        <div class="question" id="question7">
+            <div class="question-text">7. Dalam kelompok, peran apa yang paling nyaman untuk Anda?</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(7, 0)">Pemimpin yang menentukan arah</div>
+                <div class="option" onclick="selectOption(7, 1)">Penengah yang menjaga harmoni</div>
+                <div class="option" onclick="selectOption(7, 2)">Perawat yang memastikan semua merasa nyaman</div>
+                <div class="option" onclick="selectOption(7, 3)">Pengamat yang memberikan wawasan unik</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 8 -->
+        <div class="question" id="question8">
+            <div class="question-text">8. Apa yang paling penting dalam hubungan bagi Anda?</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(8, 0)">Kesetiaan dan perlindungan</div>
+                <div class="option" onclick="selectOption(8, 1)">Keseimbangan dan kejujuran</div>
+                <div class="option" onclick="selectOption(8, 2)">Kehangatan dan perhatian</div>
+                <div class="option" onclick="selectOption(8, 3)">Pemahaman dan koneksi emosional</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 9 -->
+        <div class="question" id="question9">
+            <div class="question-text">9. Bagaimana reaksi Anda ketika melihat ketidakadilan?</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(9, 0)">Langsung turun tangan untuk memperbaikinya</div>
+                <div class="option" onclick="selectOption(9, 1)">Menganalisis situasi sebelum bertindak</div>
+                <div class="option" onclick="selectOption(9, 2)">Merasa sedih dan berusaha menghibur korban</div>
+                <div class="option" onclick="selectOption(9, 3)">Mencari akar masalah untuk solusi jangka panjang</div>
+            </div>
+        </div>
+        
+        <!-- Pertanyaan 10 -->
+        <div class="question" id="question10">
+            <div class="question-text">10. Apa yang paling menggambarkan kepribadian Anda?</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(10, 0)">Berkemauan keras dan ambisius</div>
+                <div class="option" onclick="selectOption(10, 1)">Praktis dan mudah bergaul</div>
+                <div class="option" onclick="selectOption(10, 2)">Penyayang dan intuitif</div>
+                <div class="option" onclick="selectOption(10, 3)">Analitis dan penuh pertimbangan</div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button id="prev-btn" onclick="prevQuestion()">Sebelumnya</button>
+            <button id="next-btn" onclick="nextQuestion()">Selanjutnya</button>
+            <button id="submit-btn" onclick="calculateResult()">Lihat Hasil</button>
+        </div>
+        
+        <div class="result" id="result">
+            <div class="result-title">Hasil Kecocokan ABO Anda</div>
+            <div class="result-image" id="result-icon">α</div>
+            <div class="dynamic-result" id="dynamic-result">Alpha</div>
+            <div class="compatibility-score" id="compatibility-score">Kecocokan: 85%</div>
+            
+            <div class="traits-list" id="traits-list">
+                <!-- Traits will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="result-description" id="result-description">
+                Sebagai Alpha, Anda adalah pemimpin alami yang kuat dan protektif. Anda cenderung mengambil peran dominan dalam situasi sosial dan hubungan. Kehadiran Anda terasa kuat dan Anda sering menjadi pusat perhatian. Dalam dunia ABO, Alpha memiliki hierarki tertinggi dan sering kali dipandang sebagai figur yang berwibawa.
+            </div>
+            <button onclick="restartQuiz()" style="margin-top: 20px; background: linear-gradient(90deg, #6a11cb, #2575fc); color: white;">Coba Lagi</button>
+        </div>
     </div>
-    <div id="response" class="response"></div>
-    <div id="kampus" style="margin-top: 20px;"></div>
-  </div>
+    
+    <footer>
+        <p>Kalkulator Kecocokan ABO Omegaverse © 2023 | Hasil ini hanya untuk hiburan</p>
+    </footer>
 
-  <script>
-    function jawab(status) {
-      const response = document.getElementById('response');
-      const kampus = document.getElementById('kampus');
-      kampus.innerHTML = '';
-
-      if (status === 'no') {
-        response.innerHTML = 'Yahh belum rejeki :(';
-        response.style.color = '#e11d48';
-      } else {
-        response.innerHTML = 'Horeee Riris lolos PTN!! Pilih kampusnya:';
-        response.style.color = '#16a34a';
-        kampus.innerHTML = `
-          <button class="btn-campus" onclick="pilihKampus('UGM')">UGM</button>
-          <button class="btn-campus" onclick="pilihKampus('UPNY')">UPNY</button>
-          <div id="hasilKampus" style="margin-top: 15px; font-weight: bold;"></div>
-        `;
-      }
-    }
-
-    function pilihKampus(nama) {
-      const hasil = document.getElementById('hasilKampus');
-      if (nama === 'UGM') {
-        hasil.innerHTML = 'Ciyee manusia klitih 😎🎉';
-        hasil.style.color = '#8b5cf6';
-      } else if (nama === 'UPNY') {
-        hasil.innerHTML = 'Yahaha masuk barakk 🔥💪';
-        hasil.style.color = '#d97706';
-      }
-    }
-  </script>
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 10;
+        const answers = [];
+        const progressBar = document.getElementById('progress-bar');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        function updateProgress() {
+            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        function showQuestion(n) {
+            document.querySelectorAll('.question').forEach(q => {
+                q.classList.remove('active');
+            });
+            document.getElementById(`question${n}`).classList.add('active');
+            
+            // Tampilkan/sembunyikan tombol berdasarkan pertanyaan saat ini
+            prevBtn.style.display = n === 1 ? 'none' : 'block';
+            
+            if (n === totalQuestions) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+            
+            updateProgress();
+        }
+        
+        function selectOption(questionNum, optionIndex) {
+            answers[questionNum - 1] = optionIndex;
+            
+            // Hapus kelas selected dari semua opsi di pertanyaan ini
+            const options = document.querySelectorAll(`#question${questionNum} .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Tambahkan kelas selected ke opsi yang diklik
+            options[optionIndex].classList.add('selected');
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            }
+        }
+        
+        function prevQuestion() {
+            if (currentQuestion > 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+        
+        function calculateResult() {
+            // Hitung jawaban untuk setiap tipe
+            const counts = [0, 0, 0]; // Alpha, Beta, Omega counts
+            
+            for (let i = 0; i < answers.length; i++) {
+                if (answers[i] === 0) counts[0]++; // Alpha
+                else if (answers[i] === 1) counts[1]++; // Beta
+                else counts[2]++; // Omega
+            }
+            
+            let resultType = '';
+            let resultIcon = '';
+            let description = '';
+            let traits = [];
+            let score = Math.floor((Math.max(...counts) / totalQuestions) * 100);
+            
+            if (counts[0] > counts[1] && counts[0] > counts[2]) {
+                resultType = 'Alpha';
+                resultIcon = 'α';
+                traits = ['Pemimpin Alami', 'Protektif', 'Berwibawa', 'Dominan', 'Ambisisus'];
+                description = 'Sebagai Alpha, Anda adalah pemimpin alami yang kuat dan protektif. Anda cenderung mengambil peran dominan dalam situasi sosial dan hubungan. Kehadiran Anda terasa kuat dan Anda sering menjadi pusat perhatian. Dalam dunia ABO, Alpha memiliki hierarki tertinggi dan sering kali dipandang sebagai figur yang berwibawa. Alpha biasanya memiliki kepercayaan diri tinggi dan kemampuan mengambil keputusan yang cepat.';
+            } else if (counts[1] > counts[0] && counts[1] > counts[2]) {
+                resultType = 'Beta';
+                resultIcon = 'β';
+                traits = ['Seimbang', 'Praktis', 'Dapat Diandalkan', 'Adaptif', 'Logis'];
+                description = 'Sebagai Beta, Anda adalah pribadi yang seimbang dan dapat diandalkan. Anda berfungsi sebagai penengah antara Alpha dan Omega, sering kali menjadi penstabil dalam kelompok. Anda praktis, logis, dan tidak terlalu terpengaruh oleh dinamika hierarki ABO. Dalam dunia ABO, Beta adalah mayoritas populasi yang menjaga keseimbangan sosial. Mereka biasanya memiliki kemampuan beradaptasi yang tinggi dan pendekatan yang rasional terhadap masalah.';
+            } else {
+                resultType = 'Omega';
+                resultIcon = 'Ω';
+                traits = ['Empatik', 'Intuitif', 'Penyayang', 'Kreatif', 'Sensitif'];
+                description = 'Sebagai Omega, Anda adalah pribadi yang empatik dan peduli. Anda memiliki kemampuan alami untuk memahami dan merawat orang lain. Meskipun sering dianggap sebagai posisi terendah dalam hierarki ABO, Omega sebenarnya memegang peran penting dalam menciptakan harmoni dan keseimbangan. Kepekaan dan intuisi Anda adalah kekuatan yang unik. Omega biasanya sangat intuitif dan memiliki kemampuan untuk merasakan emosi orang lain.';
+            }
+            
+            // Update elemen hasil
+            document.getElementById('dynamic-result').textContent = resultType;
+            document.getElementById('result-icon').textContent = resultIcon;
+            document.getElementById('compatibility-score').textContent = `Kecocokan: ${score}%`;
+            document.getElementById('result-description').textContent = description;
+            
+            // Update daftar sifat
+            const traitsList = document.getElementById('traits-list');
+            traitsList.innerHTML = '';
+            traits.forEach(trait => {
+                const traitElement = document.createElement('div');
+                traitElement.className = 'trait';
+                traitElement.textContent = trait;
+                traitsList.appendChild(traitElement);
+            });
+            
+            // Tampilkan hasil dan sembunyikan pertanyaan
+            document.querySelectorAll('.question').forEach(q => {
+                q.style.display = 'none';
+            });
+            document.querySelector('.buttons').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            progressBar.style.width = '100%';
+        }
+        
+        function restartQuiz() {
+            currentQuestion = 1;
+            answers.length = 0;
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById('result').style.display = 'none';
+            document.querySelector('.buttons').style.display = 'flex';
+            showQuestion(1);
+        }
+        
+        // Inisialisasi kuis
+        showQuestion(1);
+    </script>
 </body>
 </html>
